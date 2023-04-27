@@ -46,29 +46,12 @@ app.engine('handlebars', handlebars.engine())
 app.set('views', __dirname+'/views')
 app.set('view engine', 'handlebars')
 
-// respuesta con los productos y limite
+// route para products
 app.use('/api/products', productsRouter)
 
-// obtener producto mediante id
-app.use('/api/products', productsRouter)
-
-// producto agregado mediante post
-app.use('/api/products', productsRouter)
-
-// actualizar producto mediante id
-app.use('/api/products', productsRouter)
-
-// eliminar producto mediante id
-app.use('api/products', productsRouter)
-
-// crear carrito con id unico y array de products
+// route para cart
 app.use('/api/carts', cartManager)
 
-// listar productos del carrito mediante id
-app.use('api/carts', cartManager)
-
-// agregar producto al array del cart mediante id
-app.use('/api/carts', cartManager)
 
 
 app.listen(8080, () => console.log('Server Up'))

@@ -1,4 +1,6 @@
 import express from 'express'
+import handlebars from 'express-handlebars'
+import __dirname from './utils.js'
 import ProductManager from './ProductManager.js'
 import productsRouter from '../src/routers/products.router.js'
 import cartManager from '../src/routers/carts.router.js'
@@ -40,6 +42,9 @@ manager.deleteProduct()
 
 const app = express()
 app.use(express.json())
+app.engine('handlebars', handlebars.engine())
+app.set('views', __dirname+'/views')
+app.set('view engine', 'handlebars')
 
 // respuesta con los productos y limite
 app.use('/api/products', productsRouter)

@@ -1,5 +1,6 @@
 import express from 'express'
 import handlebars from 'express-handlebars'
+import { Server } from 'socket.io'
 import __dirname from './utils.js'
 import ProductManager from './ProductManager.js'
 import productsRouter from '../src/routers/products.router.js'
@@ -42,6 +43,7 @@ manager.deleteProduct()
 
 const app = express()
 app.use(express.json())
+app.use(express.static(__dirname+'/public'))
 app.engine('handlebars', handlebars.engine())
 app.set('views', __dirname+'/views')
 app.set('view engine', 'handlebars')
@@ -53,5 +55,14 @@ app.use('/api/products', productsRouter)
 app.use('/api/carts', cartManager)
 
 
+/* >>>--------------> SOCKET<--------------<<< */
 
-app.listen(8080, () => console.log('Server Up'))
+const httpServer = app.listen(8080, () => console.log('Server Up'))
+
+const socketServer = new Server(httpServer)
+
+
+socketServer.on('connection', (socketClient) => {
+    console.log('Cliente socket conectado...')
+
+})

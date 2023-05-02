@@ -1,18 +1,27 @@
+<h1>Lista de productos</h1>
+<hr>
+{{#each products}}
+<div>
+    <h2>{{this.title}}</h2>
+    <h3>{{this.description}}</h3>
+    <p>Precio: ${{this.price}} </p>
+</div>
+{{/each}}
+
+<script src="/socket.io/socket.io.js"></script>
 <script>
     const socket = io()
-
-    socket.on('updateProducts', (products) => {
-        const productsList = document.getElementById('productsList')
-        productsList.innerHTML = ''
-
-        products.forEach((product) => {
-            const productDiv = document.createElement('div')
-            productDiv.innerHTML = `
-        <h2>${product.title}</h2>
-        <h3>${product.description}</h3>
-        <p>Precio: $${product.price}</p>
-        `
-            productsList.appendChild(productDiv)
-        })
-    })
+    socket.on('products', function (products) { 
+        let html = ''
+        products.forEach(function (product) {
+            html += `
+                <div>
+                    <h2>${product.title}</h2>
+                    <h3>${product.description}</h3>
+                    <p>Precio: $${product.price} </p>
+                </div>
+            `;
+        });
+        document.querySelector('h1').insertAdjacentHTML('afterend', html)
+    });
 </script>

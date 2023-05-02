@@ -5,6 +5,7 @@ import __dirname from './utils.js'
 import ProductManager from './ProductManager.js'
 import productsRouter from '../src/routers/products.router.js'
 import cartManager from '../src/routers/carts.router.js'
+import realTime from './routers/realTimeProducts.js'
 
 const manager = new ProductManager('./dataBase.txt')
 
@@ -54,6 +55,8 @@ app.use('/api/products', productsRouter)
 // route para cart
 app.use('/api/carts', cartManager)
 
+// 
+app.use('/', realTime)
 
 /* >>>--------------> SOCKET<--------------<<< */
 

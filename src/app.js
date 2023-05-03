@@ -44,9 +44,9 @@ manager.deleteProduct()
 
 const app = express()
 app.use(express.json())
-app.use(express.static(__dirname+'/public'))
+app.use(express.static(__dirname + '/public'))
 app.engine('handlebars', handlebars.engine())
-app.set('views', __dirname+'/views')
+app.set('views', __dirname + '/views')
 app.set('view engine', 'handlebars')
 
 // route para products
@@ -68,4 +68,11 @@ const socketServer = new Server(httpServer)
 socketServer.on('connection', (socketClient) => {
     console.log('Cliente socket conectado...')
 
+    socketClient.on('productAction', (data) => {
+        console.log(`Producto ${data.id} ha sido ${data.action}`)
+        const updatedProducts = manager.getProducts()
+        socketServer.emit('updateProducts', updatedProducts)
+    })
 })
+
+app.use('/realtimeproducts', realTime)

@@ -1,4 +1,5 @@
 import fs from 'fs'
+import ioClient from 'socket.io-client'
 
 class ProductManager {
     constructor() {
@@ -10,6 +11,7 @@ class ProductManager {
             console.log('Error al leer el archivo de productos:', err.message);
             this.products = [];
         }
+        this.socket = ioClient('http://localhost:8080')
     }
     
     loadProducts() {
@@ -49,6 +51,7 @@ class ProductManager {
         this.products.push(product)
         fs.writeFileSync(this.path, JSON.stringify(this.products, null, '\t'))
 
+        this.socket.emit('productModified')
         console.log('Producto registrado')
     }
 
@@ -73,6 +76,8 @@ class ProductManager {
             const updatedProduct = { ...this.products[pIndex], ...updateProd, id }
             this.products.splice(pIndex, 1, updatedProduct)
             fs.writeFileSync(this.path, JSON.stringify(this.products, null, '\t'))
+
+            this.socket.emit('productModified')
             return updatedProduct
         } else {
             return console.log('Producto no encontrado');
@@ -87,7 +92,9 @@ class ProductManager {
         } else {
             this.products.splice(index, 1)
             fs.writeFileSync(this.path, JSON.stringify(this.products, null, '\t'))
-            console.log(`El producto ${id} fue eliminado.`);
+
+            this.socket.emit('productModified')
+            console.log(`El producto ${id} fue eliminado.`)
             return true;
         }
     }
